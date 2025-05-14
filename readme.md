@@ -39,7 +39,7 @@ scraper-app/
 
 1. **Clone** the repo and enter the folder:
    ```bash
-   git clone <your-repo-url>
+   git clone
    cd scraper-app
    ```
 2. **Create** and **activate** a virtual environment (recommended):

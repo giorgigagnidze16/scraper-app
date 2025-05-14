@@ -1,0 +1,96 @@
+target:
+  url: "https://www.saucedemo.com/inventory.html"
+  base_url: "https://www.saucedemo.com"
+  login:
+    enabled: true
+    login_url: "https://www.saucedemo.com"
+    credentials:
+      username: "standard_user"
+      password: "secret_sauce"
+    selectors:
+      username_field:
+        type: css
+        value: 'input[data-test="username"]'
+      password_field:
+        type: css
+        value: 'input[data-test="password"]'
+      submit_button:
+        type: css
+        value: 'input[data-test="login-button"]'
+      captcha:
+        enabled: false
+
+navigation:
+  max_pages: 1              # ← stop after 1 page on SauceDemo
+  infinite_scroll: false
+  dropdowns:
+    - selector:
+        type: css
+        value: ".product_sort_container"
+      action: select_by_value
+      value: "lohi"
+  filters:
+    - selector:
+        type: xpath
+        value: "//input[@name='filter-checkbox']"
+      action: click
+  pre_scripts:
+    - "window.scrollTo(0, document.body.scrollHeight);"
+
+extraction:
+  item_selector: ".inventory_item"
+  fields:
+    - name: product_name
+      selector:
+        type: css
+        value: ".inventory_item_name"
+      attribute: text
+    - name: description
+      selector:
+        type: css
+        value: ".inventory_item_desc"
+      attribute: text
+    - name: price
+      selector:
+        type: css
+        value: ".inventory_item_price"
+      attribute: text
+      post_process: "float(re.sub(r'[^0-9.]','', value))"
+    - name: image_url
+      selector:
+        type: css
+        value: ".inventory_item_img img"
+      attribute: src
+    - name: button_text
+      selector:
+        type: css
+        value: ".btn_inventory"
+      attribute: text
+    - name: button_data_test
+      selector:
+        type: css
+        value: ".btn_inventory"
+      attribute: "data-test"
+    - name: product_link
+      selector:
+        type: css
+        value: ".inventory_item_name"
+      attribute: href
+    - name: computed_color
+      js: "return getComputedStyle(document.querySelector('.inventory_item_name')).color;"
+
+storage:
+  formats: ["csv", "json", "sqlite"]
+  output_dir: "./outputs"
+
+webdriver:
+  browser: "chrome"
+  headless: true
+  implicit_wait: 10
+  page_load_timeout: 30
+  script_timeout: 30
+  user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+
+retry:
+  max_attempts: 3
+  backoff_factor: 2

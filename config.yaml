@@ -1,0 +1,38 @@
+webdriver:
+  browser: chrome
+  headless: true
+  implicit_wait: 10
+  page_load_timeout: 30
+  script_timeout: 30
+
+anti_detection:
+  user_agents:
+    - "Mozilla/5.0 (Windows NT 10.0; Win64; x64)..."
+    - "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)..."
+  min_delay: 1.0    # seconds
+  max_delay: 3.0
+
+storage:
+  formats: [csv, json, sqlite]
+  output_dir: outputs
+
+target:
+  url: "https://example.com/items"
+  login:
+    enabled: false
+    login_url: "https://example.com/login"
+    username: ""
+    password: ""
+
+extraction:
+  item_selector: ".product-card"
+  fields:
+    - name: ".//h2/text()"
+    - price: ".//span[@class='price']/text()"
+    - image: ".//img/@src"
+    - rating: ".//div[@class='rating']/@data-score"
+
+navigation:
+  infinite_scroll: true
+  pagination_selector: ".pagination a.next"
+  max_pages: 5
